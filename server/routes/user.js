@@ -2,13 +2,22 @@
 import express from 'express';
 import passport from 'passport';
 import {
-  googleAuthCallback,
-  facebookAuthCallback,
-  githubAuthCallback,
-  logout,
+    googleAuthCallback,
+    facebookAuthCallback,
+    githubAuthCallback,
+    logout,
+    signup,
+    login,
 } from '../controllers/user.js';
 
 const authRouter = express.Router();
+
+
+// Signup Route
+authRouter.post('/signup', signup);
+
+// Login Route
+authRouter.post('/login', login);
 
 // Google OAuth Routes
 authRouter.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));

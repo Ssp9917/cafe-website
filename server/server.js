@@ -1,26 +1,36 @@
-import express from 'express'
+import express from 'express';
+import dotenv from 'dotenv';
+import connectDB from './config/dbConfig.js';
+import session from 'express-session';
+import passport from 'passport';
 import cors from 'cors'
+import './config/passport.js'; // Passport configuration import
+import authRouter from './routes/user.js';
+
+dotenv.config();
+
 const app = express();
-const port = process.env.PORT || 6001;
+app.use(cors())
+app.use(express.json())
+
+// MongoDB connect
+connectDB();
 
 
-// middleware
-app.use(cors());
-app.use(express.json());
+// setup express session
+app.use(session({
+  secret: 'your_secret_key',
+  resave: false,
+  saveUninitialized: false,
+}));
 
-//connect to mongoDB config
-// mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.lfvbtud.mongodb.net/MRKing-DB?retryWrites=true&w=majority`)
-// .then(() => console.log('MongoDB connected...'))
+// use passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
+// route
+app.use('/auth', authRouter);
 
-//   import routes here
-
-
-
-app.get("/", (req, res) => {
-  res.send("Hello Foodi Client Server!");
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+// port
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

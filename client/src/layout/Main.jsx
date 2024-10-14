@@ -7,6 +7,8 @@ const Main = () => {
 
     const [loading,setLoading] = useState(false)
 
+    
+
     return (
         <div className="bg-white h-full">
             {loading ? (

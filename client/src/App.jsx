@@ -1,18 +1,22 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { RouterProvider } from 'react-router-dom'
-import router from './router/Router'
+import { RouterProvider } from "react-router-dom";
+import router from "./router/Router";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import AuthProvider from "./context/AuthProvider";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  console.log(clientId);
 
   return (
     <>
-     <RouterProvider router={router}/>
+      <GoogleOAuthProvider clientId="804403418968-ssv20chas0vibj059pc48in5mtvpodda.apps.googleusercontent.com">
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
+      </GoogleOAuthProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

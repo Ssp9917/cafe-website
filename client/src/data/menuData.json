@@ -1,0 +1,59 @@
+[
+    {
+      "_id": "1",
+      "name": "Chicken Rice",
+      "category": "rice",
+      "price": 250,
+      "image": "/images/chicken_rice.jpg"
+    },
+    {
+      "_id": "2",
+      "name": "Beef Kottu",
+      "category": "kottu",
+      "price": 300,
+      "image": "/images/beef_kottu.jpg"
+    },
+    {
+      "_id": "3",
+      "name": "Cheeseburger",
+      "category": "burger",
+      "price": 200,
+      "image": "/images/cheeseburger.jpg"
+    },
+    {
+      "_id": "4",
+      "name": "Spaghetti Noodles",
+      "category": "noodles",
+      "price": 220,
+      "image": "/images/spaghetti_noodles.jpg"
+    },
+    {
+      "_id": "5",
+      "name": "Chocolate Cake",
+      "category": "dessert",
+      "price": 150,
+      "image": "/images/chocolate_cake.jpg"
+    },
+    {
+      "_id": "6",
+      "name": "Lemonade",
+      "category": "drinks",
+      "price": 80,
+      "image": "/images/lemonade.jpg"
+    },
+    {
+      "_id": "7",
+      "name": "Fried Rice",
+      "category": "rice",
+      "price": 180,
+      "image": "/images/fried_rice.jpg"
+    },
+    {
+      "_id": "8",
+      "name": "Vegetable Kottu",
+      "category": "kottu",
+      "price": 250,
+      "image": "/images/vegetable_kottu.jpg"
+    }
+  ]
+  

@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Footer, Navbar } from '../components'
 import LoadingSpinner from '../components/LoadingSpinner'
+import { AuthContext } from '../context/AuthProvider'
 
 const Main = () => {
 
-    const [loading,setLoading] = useState(false)
+    const {loading} = useContext(AuthContext)
 
     
 
@@ -14,7 +15,7 @@ const Main = () => {
             {loading ? (
                 <LoadingSpinner />
             ) : (
-                <div>
+                <div className='max-w-screen-2xl mx-auto'>
                     <Navbar />
                     <div className="min-h-screen">
                         <Outlet />

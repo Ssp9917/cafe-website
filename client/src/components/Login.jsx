@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { FaFacebookF, FaGithub, FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from '../config/axiosConfig';
+import { AuthContext } from '../context/AuthProvider';
 
 const Login = () => {
 
   const [errorMessage, seterrorMessage] = useState("");
+  const navigate = useNavigate()
 
+  const {setUser} = useContext(AuthContext)
 
   //react hook form
   const {
@@ -16,6 +20,34 @@ const Login = () => {
   } = useForm();
 
 
+  const onSubmit = async (data) => {
+    try {
+
+      const response = await axios.post('/auth/login', data);
+      console.log(response);
+
+      setUser(response.data.user)
+
+      // Show success message
+      swal({
+        title: "Login Successful!",
+        text: "Welcome back! You are now logged in.",
+        icon: "success",
+        buttons: false,
+        timer: 2000, // Optional: auto-close after 2 seconds
+      });
+
+      // Delay the navigation to allow the user to see the swal message
+      setTimeout(() => {
+        navigate('/'); // Redirect to login page
+      }, 2000); // Adjust the delay time as needed
+
+    } catch (error) {
+      console.error(error);
+      alert('Error login up');
+    }
+  };
+
 
   return (
     <dialog id='my_model_5' className='modal modal-middle sm:modal-middle' open>
@@ -24,7 +56,7 @@ const Login = () => {
           <form
             className="card-body"
             method="dialog"
-          // onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <h3 className="font-bold text-slate-600 text-xl text-center mb-4">Please Login!</h3>
 

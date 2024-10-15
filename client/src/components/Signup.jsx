@@ -3,27 +3,43 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaFacebookF, FaGithub, FaGoogle } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
+import swal from 'sweetalert';
 
-import axios from 'axios';
+import axios from '../config/axiosConfig';
 import { AuthContext } from '../context/AuthProvider';
 
 const Signup = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
-  
+
   // Access authentication functions from AuthContext
-  const { googleLogin, handleGithubLogin } = useContext(AuthContext);
+  const { googleLogin, handleGithubLogin, signup } = useContext(AuthContext);
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('/api/auth/signup', data);
-      alert(response.data.message);
-      navigate('/login');
+      const response = await signup(data);
+      console.log(response);
+
+      // Show success message
+      swal({
+        title: "Account Created!",
+        text: "Your account has been created successfully.",
+        icon: "success",
+        buttons: false,
+        timer: 2000, // Optional: auto-close after 2 seconds
+      });
+
+      // Delay the navigation to allow the user to see the swal message
+      setTimeout(() => {
+        navigate('/login'); // Redirect to login page
+      }, 2000); // Adjust the delay time as needed
+
     } catch (error) {
       console.error(error);
       alert('Error signing up');
     }
   };
+
 
   return (
     <dialog id="my_model_6" className="modal modal-middle sm:modal-middle" open>

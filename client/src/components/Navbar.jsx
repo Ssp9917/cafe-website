@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import logo from "/logo2.png";
 import { FaRegUser } from "react-icons/fa";
+import { AuthContext } from '../context/AuthProvider';
+import Profile from './Profile';
 // import Profile from "/Profile";
 
 const Navbar = () => {
   const [isSticky, setSticky] = useState(false);
   const location = useLocation(); // Get current path
 
-  console.log(location)
-  const [user, setUser] = useState(false);
   const [cart, setCart] = useState([]);
+
+  const {user} = useContext(AuthContext)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -136,7 +138,7 @@ const Navbar = () => {
 
           {
             user ? <>
-              {/* <Profile user={user} /> */}
+              <Profile user={user} />
             </> :
               <Link to='/login' className='btn flex items-center gap-2 rounded-full px-6  bg-myYellowOne text-slate-600 hover:bg-mYyellow'>
                 <FaRegUser /> Login

@@ -1,7 +1,7 @@
 // src/auth/AuthProvider.js
 import React, { createContext, useState, useEffect } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
-import axios from "axios";
+import axios from "../config/axiosConfig";
 
 // Create the AuthContext
 export const AuthContext = createContext();
@@ -11,11 +11,34 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // signup with credential
+   const signup = async (data) => {
+    try {
+      const response = await axios.post('/auth/signup', data);
+      return response.data;
+    } catch (error) {
+      console.error('Signup error:', error);
+      throw error;
+    }
+  };
+
+
+  // login with credential
+  const login = async (data) => {
+    try {
+      const response = await axios.post('/auth/login',data);
+      return response.data;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
+  }
+
   // Google login function
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        const response = await axios.post("/api/auth/google", {
+        const response = await axios.get("/auth/google", {
           token: tokenResponse.credential,
         });
         setUser(response.data.user);
@@ -62,7 +85,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, googleLogin, handleGithubLogin, logout }}
+      value={{ user, loading,setUser,googleLogin, handleGithubLogin, logout,signup }}
     >
       {children}
     </AuthContext.Provider>

@@ -6,6 +6,7 @@ import passport from 'passport';
 import cors from 'cors';
 import './config/passport.js'; // Passport configuration import
 import authRouter from './routes/user.js';
+import menuItemRoutes from './routes/menuItem.js';
 
 dotenv.config();
 
@@ -17,13 +18,14 @@ connectDB();
 // CORS configuration
 app.use(
   cors({
-    origin: 'http://localhost:5173', // Allow requests from this origin
-    credentials: true,               // Enable cookies and credentials
+    origin: 'http://localhost:5173', 
+    credentials: true,     
   })
 );
 
 // Middleware to parse JSON requests
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 
 // Setup express session
 app.use(
@@ -45,6 +47,7 @@ app.use(passport.session());
 
 // Routes
 app.use('/auth', authRouter);
+app.use('/api/menuItem', menuItemRoutes); // Use menu routes
 
 // Port
 const PORT = process.env.PORT || 5001;

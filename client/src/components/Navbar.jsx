@@ -12,7 +12,7 @@ const Navbar = () => {
 
   const [cart, setCart] = useState([]);
 
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
 
   useEffect(() => {
     const handleScroll = () => {

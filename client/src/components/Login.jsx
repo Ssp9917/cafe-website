@@ -34,13 +34,13 @@ const Login = () => {
         text: "Welcome back! You are now logged in.",
         icon: "success",
         buttons: false,
-        timer: 2000, // Optional: auto-close after 2 seconds
+        timer: 2000, 
       });
 
-      // Delay the navigation to allow the user to see the swal message
+    
       setTimeout(() => {
-        navigate('/'); // Redirect to login page
-      }, 2000); // Adjust the delay time as needed
+        navigate('/'); 
+      }, 2000); 
 
     } catch (error) {
       console.error(error);

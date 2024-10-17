@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import { model, Schema } from 'mongoose';
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
   name: { type: String},
   email: { type: String, unique: true, required: true },
   password: { type: String },
@@ -9,6 +9,6 @@ const UserSchema = new mongoose.Schema({
   githubId: { type: String },
 });
 
-const User = mongoose.model('User', UserSchema);
+const User = model('User', UserSchema);
 
 export default User;

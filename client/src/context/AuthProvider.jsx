@@ -9,7 +9,7 @@ export const AuthContext = createContext();
 // AuthProvider component
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // signup with credential
    const signup = async (data) => {
@@ -85,7 +85,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading,setUser,googleLogin, handleGithubLogin, logout,signup }}
+      value={{ user, loading,setUser,googleLogin, handleGithubLogin, logout,signup,login }}
     >
       {children}
     </AuthContext.Provider>

@@ -16,12 +16,12 @@ const app = express();
 connectDB();
 
 // CORS configuration
-app.use(
-  cors({
-    origin: 'http://localhost:5173', 
-    credentials: true,     
-  })
-);
+app.use(cors({
+  origin: 'http://localhost:5173', // Replace with the correct client URL
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'], // Ensure 'Authorization' is allowed
+}));
+
 
 // Middleware to parse JSON requests
 app.use(express.json());
@@ -46,7 +46,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.use('/auth', authRouter);
+app.use('/api/auth', authRouter);
 app.use('/api/menuItem', menuItemRoutes); // Use menu routes
 
 // Port

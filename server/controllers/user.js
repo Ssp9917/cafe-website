@@ -2,6 +2,8 @@
 import User from '../models/user.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
+import path from 'path';
 
 
 // Signup Controller
@@ -84,3 +86,98 @@ export const logout = (req, res) => {
         res.redirect('/');
     });
 }
+
+// get all user
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find();
+        res.status(200).json(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+
+
+
+// Update user details
+export const updateUserDetails = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, email, role } = req.body;
+
+        console.log(req.headers.authorization)
+
+        // Get the token from the request headers
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Authentication token required' });
+        }
+
+        // Verify the token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const loggedInUserId = decoded.id;
+        const loggedInUserRole = decoded.role;
+
+        // Fetch the user to be updated
+        const userToUpdate = await User.findById(id);
+        if (!userToUpdate) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // If the logged-in user is an admin, they can update any user's role
+        if (loggedInUserRole === 'admin') {
+            if (role) {
+                userToUpdate.role = role;
+            }
+            if (name) {
+                userToUpdate.name = name;
+            }
+            if (email) {
+                userToUpdate.email = email;
+            }
+        } else {
+            // If the logged-in user is not an admin, they can only update their own details
+            if (userToUpdate._id.toString() !== loggedInUserId) {
+                return res.status(403).json({ message: 'Permission denied' });
+            }
+
+            // Update only name and email
+            if (name) {
+                userToUpdate.name = name;
+            }
+            if (email) {
+                userToUpdate.email = email;
+            }
+            if (role) {
+                return res.status(403).json({ message: 'You are not allowed to update the role' });
+            }
+        }
+
+        // Handle image upload if a file is provided
+        if (req.file) {
+            const uploadPath = path.join(__dirname, '../uploads', req.file.filename); // Set the upload path
+            const userImagePath = path.join(__dirname, '../uploads', userToUpdate.profileImage); // Existing image path
+
+            // Move the uploaded file to the desired location
+            fs.renameSync(req.file.path, uploadPath);
+
+            // Update userToUpdate with the new image path
+            userToUpdate.profileImage = req.file.filename;
+
+            // Optionally delete the existing image file if it exists
+            if (fs.existsSync(userImagePath)) {
+                fs.unlinkSync(userImagePath); // Delete the old image file
+            }
+        }
+
+        // Save the updated user details
+        await userToUpdate.save();
+
+        res.status(200).json({ message: 'User details updated successfully', user: userToUpdate });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+

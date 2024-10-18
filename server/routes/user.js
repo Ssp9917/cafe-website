@@ -1,6 +1,7 @@
 // /routes/authRoutes.js
 import express from 'express';
 import passport from 'passport';
+import upload from '../config/multerConfig.js'
 import {
     googleAuthCallback,
     facebookAuthCallback,
@@ -8,6 +9,8 @@ import {
     logout,
     signup,
     login,
+    getAllUsers,
+    updateUserDetails,
 } from '../controllers/user.js';
 
 const authRouter = express.Router();
@@ -33,5 +36,11 @@ authRouter.get('/github/callback', passport.authenticate('github', { failureRedi
 
 // Logout Route
 authRouter.get('/logout', logout);
+
+// getAlluser
+authRouter.get('/getAllUser',getAllUsers);
+
+// updateUserDetails
+authRouter.put('/users/:id?', upload.single('profileImage'), updateUserDetails);
 
 export default authRouter;

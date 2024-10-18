@@ -10,6 +10,9 @@ export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [token,setToken] = useState('')
+
+  // console.log(token)
 
   // signup with credential
    const signup = async (data) => {
@@ -25,6 +28,7 @@ const AuthProvider = ({ children }) => {
 
   // login with credential
   const login = async (data) => {
+    console.log(data)
     try {
       const response = await axios.post('/auth/login',data);
       return response.data;
@@ -85,7 +89,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading,setUser,googleLogin, handleGithubLogin, logout,signup,login }}
+      value={{ user, loading,setUser,googleLogin, handleGithubLogin, logout,signup,login,setToken,token }}
     >
       {children}
     </AuthContext.Provider>

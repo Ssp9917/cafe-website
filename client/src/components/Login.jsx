@@ -4,13 +4,17 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from 'react-router-dom'
 import axios from '../config/axiosConfig';
 import { AuthContext } from '../context/AuthProvider';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../features/auth/authSlice';
+
 
 const Login = () => {
 
   const [errorMessage, seterrorMessage] = useState("");
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-  const {setUser} = useContext(AuthContext)
+  const {setUser,login} = useContext(AuthContext)
 
   //react hook form
   const {
@@ -22,11 +26,15 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
+      console.log(data)
+      const response = await login(data)
+      console.log(response.token);
 
-      const response = await axios.post('/auth/login', data);
-      console.log(response);
-
-      setUser(response.data.user)
+      setUser(response.user)
+      if (response.token) {
+        dispatch(setToken(response.token));
+        localStorage.setItem('token', response.token);
+      }
 
       // Show success message
       swal({

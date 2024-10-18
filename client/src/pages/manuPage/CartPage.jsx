@@ -14,6 +14,8 @@ const CartPage = () => {
   const dispatch = useDispatch();
   const { user } = useContext(AuthContext);
 
+  console.log(user)
+
   // Calculate price for each item
   const calculatePrice = (item) => item.price * item.quantity;
 
@@ -136,7 +138,7 @@ const CartPage = () => {
               <h3 className="text-xl font-semibold mb-2 md:mb-4 text-slate-600">Customer details</h3>
               {user ? (
                 <>
-                  <p className="mb-2 text-slate-500">Name: {user.displayName}</p>
+                  <p className="mb-2 text-slate-500">Name: {user.name}</p>
                   <p className="mb-2 text-slate-500">Email: {user.email}</p>
                 </>
               ) : (

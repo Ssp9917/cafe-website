@@ -7,29 +7,44 @@ import { IoCall } from 'react-icons/io5';
 import { IoMdLogOut } from 'react-icons/io';
 import { FaUserCircle } from 'react-icons/fa';
 import { AuthContext } from "../context/AuthProvider";
+import Swal from "sweetalert2";
 // import useAdmin from "../hooks/useAdmin";
 
 
 
 const Profile = ({ user }) => {
 
-    const { logOut } = useContext(AuthContext);
+    const { logout } = useContext(AuthContext);
     const navigate = useNavigate()
     const [isAdmin, isAdminLoading] = useState(true);
 
-    // logout
-    const handleLogout = () => {
-        logOut()
-            .then(() => {
-                // Sign-out successful.
-                navigate("/")
-                /* console user data */
-                console.log(user)
-            })
-            .catch((error) => {
-                console.log(error);
+
+    // Logout function
+    const handleLogout = async () => {
+        try {
+            const response = await logout();
+            console.log(response);
+    
+            // Show SweetAlert2 popup on successful logout
+            Swal.fire({
+                title: "Logged Out",
+                text: "You have been successfully logged out.",
+                icon: "success",
+                confirmButtonText: "OK",
             });
+        } catch (error) {
+            console.error("Logout failed:", error);
+    
+            // Show SweetAlert2 error popup on logout failure
+            Swal.fire({
+                title: "Error",
+                text: "An error occurred while logging out. Please try again.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
     };
+    
 
     return (
         <div>

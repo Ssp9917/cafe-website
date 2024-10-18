@@ -1,41 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaTrashAlt, FaUsers } from 'react-icons/fa';
+import { useGetAllUsersQuery } from '../../../api/userApiSlice';
 
 const Users = () => {
-    // Dummy user data
-    const [users, setUsers] = useState([
-        {
-            _id: '1',
-            name: 'John Doe',
-            email: 'john.doe@example.com',
-            role: 'user',
-        },
-        {
-            _id: '2',
-            name: 'Jane Smith',
-            email: 'jane.smith@example.com',
-            role: 'admin',
-        },
-        {
-            _id: '3',
-            name: 'Alice Johnson',
-            email: 'alice.johnson@example.com',
-            role: 'user',
-        },
-        {
-            _id: '4',
-            name: 'Bob Brown',
-            email: 'bob.brown@example.com',
-            role: 'user',
-        },
-        {
-            _id: '5',
-            name: 'Charlie Davis',
-            email: 'charlie.davis@example.com',
-            role: 'admin',
-        },
-    ]);
+    // Fetching users from the API
+    const { data: usersData, isLoading, isError, error } = useGetAllUsersQuery();
+    const [users, setUsers] = useState([]);
 
+    // Update the local state when the API data changes
+    useEffect(() => {
+        if (usersData) {
+            setUsers(usersData);
+        }
+    }, [usersData]);
+
+    // Handle making a user an admin
     const handleMakeAdmin = (user) => {
         const updatedUsers = users.map((u) =>
             u._id === user._id ? { ...u, role: 'admin' } : u
@@ -43,10 +22,29 @@ const Users = () => {
         setUsers(updatedUsers);
     };
 
+    // Handle deleting a user
     const handleDeleteUser = (user) => {
         const filteredUsers = users.filter((u) => u._id !== user._id);
         setUsers(filteredUsers);
     };
+
+    // Display loading state
+    if (isLoading) {
+        return (
+            <div className="text-center text-white">
+                <p>Loading users...</p>
+            </div>
+        );
+    }
+
+    // Display error state
+    if (isError) {
+        return (
+            <div className="text-center text-red-500">
+                <p>Error loading users: {error?.message || 'An error occurred'}</p>
+            </div>
+        );
+    }
 
     return (
         <div className="w-full md:w-[900px] px-4 mx-auto">
@@ -54,7 +52,9 @@ const Users = () => {
                 {/* header */}
                 <h1 className="text-4xl font-bold text-center text-white">Users</h1>
 
-                <h5 className="text-2xl font-bold mb-4 text-white">Total Users: {users.length}</h5>
+                <h5 className="text-2xl font-bold mb-4 text-white">
+                    Total Users: {users.length}
+                </h5>
 
                 <div className="overflow-x-auto">
                     <table className="border border-gray-300 w-full rounded-md">
@@ -67,9 +67,12 @@ const Users = () => {
                                 <th className="py-3 px-6 text-left">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className='text-white'>
+                        <tbody className="text-white">
                             {users.map((user, index) => (
-                                <tr key={index} className={index % 2 === 0 ? 'bg-stone-950' : ''}>
+                                <tr
+                                    key={user._id}
+                                    className={index % 2 === 0 ? 'bg-stone-950' : ''}
+                                >
                                     <td className="py-3 px-6">{index + 1}</td>
                                     <td className="py-3 px-6">{user.name}</td>
                                     <td className="py-3 px-6">{user.email}</td>

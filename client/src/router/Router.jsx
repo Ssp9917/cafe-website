@@ -17,6 +17,8 @@ import Order from "../pages/dashboard/Order";
 import CartPage from "../pages/manuPage/CartPage";
 import CheckoutForm from "../pages/manuPage/CheckoutForm";
 import Payment from "../pages/manuPage/Payment";
+import UpdateMenu from "../pages/dashboard/admin/UpdateMenu";
+import { useViewSingleMenuQuery } from "../api/menuItemApiSlice";
 
 
 
@@ -33,6 +35,7 @@ const router = createBrowserRouter([
         path: "/menu",
         element: <Menu />
       },
+     
       {
         path: "/about-us",
         element: <About/>
@@ -56,7 +59,7 @@ const router = createBrowserRouter([
       {
         path:"/process-checkout",
         element:<Payment/>
-      }
+      },
     ]
   },
   {
@@ -87,11 +90,10 @@ const router = createBrowserRouter([
         path: "manage-items",
         element: <ManageItems/>
       },
-      // {
-      //   path: "update-menu/:id",
-      //   element: <UpdateMenu/>,
-      //   loader: ({params}) => fetch(`http://localhost:6001/menu/${params.id}`)
-      // },
+      {
+        path: "update-menu/:id",
+        element: <UpdateMenu/>
+      },
       {
         path: "manage-booking",
         element: <ManageBooking/>

@@ -6,10 +6,10 @@ import { createMenuItem, deleteMenuItem, getMenuItemById, getMenuItems, updateMe
 const menuItemRoutes = express.Router();
 
 // Routes
-menuItemRoutes.post('/add-menuItem', upload.single('image'), createMenuItem);
-menuItemRoutes.get('/', getMenuItems);
-menuItemRoutes.get('/:id', getMenuItemById);
-menuItemRoutes.put('/:id', upload.single('image'), updateMenuItem);
-menuItemRoutes.delete('/:id', deleteMenuItem);
+menuItemRoutes.post('/addMenuItem', upload.single('image'), createMenuItem);
+menuItemRoutes.get('/getAllMenuItem/', getMenuItems);
+menuItemRoutes.get('/getSingleMenuItem/:id', getMenuItemById);
+menuItemRoutes.put('/updateMenuItem/:id', upload.single('image'), updateMenuItem);
+menuItemRoutes.delete('/deleteMenuItem/:id', deleteMenuItem);
 
 export default menuItemRoutes;

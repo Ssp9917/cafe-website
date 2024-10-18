@@ -88,15 +88,15 @@ const SpecialDishes = () => {
   ]);
   const slider = React.useRef(null);
 
-  useEffect(() => {
-    fetch("http://localhost:6001/menu")
-      .then((res) => res.json())
-      .then((data) => {
-        const specials = data.filter((item) => item.category === "popular");
-        // console.log(specials)
-        setRecipes(specials);
-      });
-  }, []);
+  // useEffect(() => {
+  //   fetch("http://localhost:6001/menu")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       const specials = data.filter((item) => item.category === "popular");
+  //       // console.log(specials)
+  //       setRecipes(specials);
+  //     });
+  // }, []);
 
   const settings = {
     dots: true,

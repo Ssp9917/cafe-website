@@ -2,21 +2,23 @@ import React from "react";
 
 const Cards = ({item}) => {
 
-    const { name, image, price, recipe, _id } = item;
+  console.log(item)
+
+    const { recipeName, image, price, recipeDetails, _id } = item;
 
   return (
     <div className="bg-cardYellow rounded-lg shadow-2xl hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out">
       <div className="flex justify-center items-center">
         <img
-          src={image}
+          src={`http://localhost:5001/${image}`}
           alt={name}
           className="w-[300px] mt-3 h-48 rounded-t-lg"
         />
       </div>
       <div className="p-3">
-        <h3 className="text-xl  text-gray-900">{name}</h3>
+        <h3 className="text-xl  text-gray-900">{recipeName}</h3>
         <p className=" mt-2  text-xs text-gray-500  h-20 overflow-hidden">
-          {recipe}
+          {recipeDetails}
         </p>
         <div className="flex items-center justify-between ">
           <div className="flex items-center">

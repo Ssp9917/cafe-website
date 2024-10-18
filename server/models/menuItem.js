@@ -6,6 +6,7 @@ const MenuItemSchema = new Schema({
   price: { type: String },
   recipeDetails: { type: String },
   image: { type: String },
+  specialDishes:{type:Boolean}
 });
 
 const MenuItem = model('MenuItem', MenuItemSchema);

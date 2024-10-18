@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaUtensils } from "react-icons/fa";
 import { useAddMenuItemsMutation } from '../../../api/menuItemApiSlice';
@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 const AddMenu = () => {
     const { register, handleSubmit, reset } = useForm();
     const [addMenuItem, { isLoading }] = useAddMenuItemsMutation();
+    const [isSpecialDish, setIsSpecialDish] = useState(false); // State for the toggle button
 
     const onSubmit = async (data) => {
         try {
@@ -16,6 +17,7 @@ const AddMenu = () => {
             formData.append("price", data.price);
             formData.append("recipeDetails", data.recipeDetails);
             formData.append("image", data.image[0]); // Assuming image is a file input
+            formData.append("specialDishes", isSpecialDish); // Add specialDishes field
 
             // Call the mutation function to add the menu item
             await addMenuItem(formData).unwrap();
@@ -30,6 +32,7 @@ const AddMenu = () => {
 
             // Reset the form fields
             reset();
+            setIsSpecialDish(false); // Reset the toggle button state
 
         } catch (error) {
             // Show an error message if something goes wrong
@@ -106,6 +109,19 @@ const AddMenu = () => {
                             className="textarea textarea-bordered h-24 bg-white text-slate-600 border-2 border-slate-300"
                             placeholder="Tell the world about your recipe"
                         ></textarea>
+                    </div>
+
+                    {/* Toggle Button for Special Dish */}
+                    <div className="flex items-center gap-4 my-6">
+                        <label className="label">
+                            <span className="label-text text-slate-500 text-base font-bold">Mark as Special Dish</span>
+                        </label>
+                        <input
+                            type="checkbox"
+                            checked={isSpecialDish}
+                            onChange={() => setIsSpecialDish(!isSpecialDish)}
+                            className="toggle toggle-accent"
+                        />
                     </div>
 
                     {/* 4th row */}

@@ -1,103 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useRef } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { useState } from "react";
 import HomeCards from "../../components/HomeCards";
-import { FaAngleLeft } from "react-icons/fa6";
-import { FaAngleRight } from "react-icons/fa6";
-
-const simpleNextArrow = (props) => {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{
-        ...style,
-        display: "block",
-        background: "red",
-      }}
-      onClick={onClick}
-    >
-      Next
-    </div>
-  );
-};
-
-const simplePrevArrow = (props) => {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{
-        ...style,
-        display: "block",
-        background: "green",
-      }}
-      onClick={onClick}
-    >
-      Back
-    </div>
-  );
-};
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { useGetMenuItemsQuery } from "../../api/menuItemApiSlice";
 
 const SpecialDishes = () => {
-  const [recipes, setRecipes] = useState([
-    {
-      id: 1,
-      image: "https://via.placeholder.com/150",
-      name: "Spaghetti Carbonara",
-      recipe: "A classic Italian pasta dish with eggs, cheese, and pancetta.",
-      price: 12.99,
-    },
-    {
-      id: 2,
-      image: "https://via.placeholder.com/150",
-      name: "Chicken Biryani",
-      recipe: "A flavorful Indian rice dish with spices and tender chicken.",
-      price: 15.49,
-    },
-    {
-      id: 3,
-      image: "https://via.placeholder.com/150",
-      name: "Caesar Salad",
-      recipe: "Crisp romaine lettuce with Caesar dressing and croutons.",
-      price: 9.99,
-    },
-    {
-      id: 3,
-      image: "https://via.placeholder.com/150",
-      name: "Caesar Salad",
-      recipe: "Crisp romaine lettuce with Caesar dressing and croutons.",
-      price: 9.99,
-    },
-    {
-      id: 3,
-      image: "https://via.placeholder.com/150",
-      name: "Caesar Salad",
-      recipe: "Crisp romaine lettuce with Caesar dressing and croutons.",
-      price: 9.99,
-    },
-    {
-      id: 3,
-      image: "https://via.placeholder.com/150",
-      name: "Caesar Salad",
-      recipe: "Crisp romaine lettuce with Caesar dressing and croutons.",
-      price: 9.99,
-    },
-  ]);
-  
-  const slider = React.useRef(null);
+  const slider = useRef(null);
 
-  // useEffect(() => {
-  //   fetch("http://localhost:6001/menu")
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       const specials = data.filter((item) => item.category === "popular");
-  //       // console.log(specials)
-  //       setRecipes(specials);
-  //     });
-  // }, []);
+  // Fetch menu items from the API
+  const { data: menuItems, isLoading, error } = useGetMenuItemsQuery();
+
+  // Filter the menu items to only include those with specialDishes set to true
+  const specialDishes = menuItems?.filter((item) => item.specialDishes === true) || [];
 
   const settings = {
     dots: true,
@@ -134,11 +50,14 @@ const SpecialDishes = () => {
     ],
   };
 
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading special dishes.</div>;
+
   return (
     <div className="section-container my-20 bg-white relative">
       <div className="text-left">
         <p className="subtitle">Special Dishes</p>
-        <h2 className="title md:w-[520px] ">Standout Dishes From Our Menue</h2>
+        <h2 className="title md:w-[520px] ">Standout Dishes From Our Menu</h2>
       </div>
 
       {/* Arrow buttons */}
@@ -157,11 +76,14 @@ const SpecialDishes = () => {
           <FaAngleRight className="w-8 h-8 p-1" style={{ color: "black" }} />
         </button>
       </div>
+
       <div className="mt-4 mb-8">
-        <Slider ref={slider} {...settings} className="bg-white  mt-10 mb-10 ">
-          {recipes.map((item, i) => (
-            <HomeCards key={i} item={item} />
-          ))}
+        <Slider ref={slider} {...settings} className="bg-white mt-10 mb-10">
+          {specialDishes.length > 0 ? (
+            specialDishes.map((item, i) => <HomeCards key={i} item={item} />)
+          ) : (
+            <div className="text-center">No special dishes available.</div>
+          )}
         </Slider>
       </div>
     </div>

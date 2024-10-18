@@ -4,7 +4,7 @@ import path from 'path';
 // Create a new menu item
 export const createMenuItem = async (req, res) => {
   try {
-    const { recipeName, category, price, recipeDetails } = req.body;
+    const { recipeName, category, price, recipeDetails,specialDishes } = req.body;
     const image = req.file ? req.file.path : null; // Get image path from multer
 
     const newMenuItem = new MenuItem({
@@ -13,6 +13,7 @@ export const createMenuItem = async (req, res) => {
       price,
       recipeDetails,
       image,
+      specialDishes
     });
 
     await newMenuItem.save();

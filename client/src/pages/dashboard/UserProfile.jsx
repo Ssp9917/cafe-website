@@ -3,7 +3,7 @@ import { AuthContext } from '../../context/AuthProvider';
 import { useForm } from 'react-hook-form';
 import { FaUserCircle } from 'react-icons/fa';
 import { useUpdateUserProfileMutation } from '../../api/userApiSlice';
-import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const UserProfile = () => {
     const { user } = useContext(AuthContext);
@@ -19,7 +19,12 @@ const UserProfile = () => {
 
         try {
             await updateUserProfile(userData).unwrap();
-            alert("Profile updated successfully");
+            Swal.fire({
+                title: 'Success!',
+                text: "User updated.",
+                icon: 'success',
+                confirmButtonText: 'OK',
+            });
         } catch (err) {
             console.error("Failed to update profile: ", err);
         }
@@ -42,7 +47,7 @@ const UserProfile = () => {
                             <FaUserCircle />
                         </div>
                     )}
-                    <h2 className="mt-4 text-xl font-semibold text-gray-800">{user.name}</h2>
+                    <h2 className="mt-4 text-xl font-semibold text-gray-800">{user?.name}</h2>
                 </div>
                 <form className="mt-6" onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-6">

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { FaTrashAlt, FaUsers } from 'react-icons/fa';
-import { useGetAllUsersQuery } from '../../../api/userApiSlice';
+import { useGetAllUsersQuery, useUpdateUserProfileMutation } from '../../../api/userApiSlice';
+import Swal from 'sweetalert2';
 
 const Users = () => {
     // Fetching users from the API
-    const { data: usersData, isLoading, isError, error } = useGetAllUsersQuery();
+    const { data: usersData, isLoading, isError, error, refetch } = useGetAllUsersQuery();
     const [users, setUsers] = useState([]);
+    const [updateUserProfile, { isLoading: isUpdating, isError: isUpdatingError }] = useUpdateUserProfileMutation();
 
     // Update the local state when the API data changes
     useEffect(() => {
@@ -14,13 +16,28 @@ const Users = () => {
         }
     }, [usersData]);
 
-    // Handle making a user an admin
-    const handleMakeAdmin = (user) => {
-        const updatedUsers = users.map((u) =>
-            u._id === user._id ? { ...u, role: 'admin' } : u
-        );
-        setUsers(updatedUsers);
-    };
+const handleMakeAdmin = async (user) => {
+    console.log(user);
+
+    // Determine the new role
+    const newRole = user.role === 'admin' ? 'user' : 'admin';
+
+    try {
+        await updateUserProfile({ id: user._id, role: newRole }).unwrap();
+        refetch();  
+
+        // Show a success message with SweetAlert2
+        Swal.fire({
+            title: 'Success!',
+            text: `User role updated to ${newRole}.`,
+            icon: 'success',
+            confirmButtonText: 'OK',
+        });
+    } catch (error) {
+        console.error('Failed to update role:', error);
+    }
+};
+
 
     // Handle deleting a user
     const handleDeleteUser = (user) => {
@@ -49,12 +66,18 @@ const Users = () => {
     return (
         <div className="w-full md:w-[900px] px-4 mx-auto">
             <div className="bg-stone-950 rounded-2xl mt-4 px-4 py-4">
-                {/* header */}
+                {/* Header */}
                 <h1 className="text-4xl font-bold text-center text-white">Users</h1>
 
                 <h5 className="text-2xl font-bold mb-4 text-white">
                     Total Users: {users.length}
                 </h5>
+
+                {/* Updating Loading State for Role Update */}
+                {isUpdating && <p className="text-yellow-500">Updating user role...</p>}
+                {isUpdatingError && (
+                    <p className="text-red-500">Error updating role: {isUpdatingError?.message || 'An error occurred'}</p>
+                )}
 
                 <div className="overflow-x-auto">
                     <table className="border border-gray-300 w-full rounded-md">
@@ -69,22 +92,20 @@ const Users = () => {
                         </thead>
                         <tbody className="text-white">
                             {users.map((user, index) => (
-                                <tr
-                                    key={user._id}
-                                    className={index % 2 === 0 ? 'bg-stone-950' : ''}
-                                >
+                                <tr key={user._id} className={index % 2 === 0 ? 'bg-stone-950' : ''}>
                                     <td className="py-3 px-6">{index + 1}</td>
                                     <td className="py-3 px-6">{user.name}</td>
                                     <td className="py-3 px-6">{user.email}</td>
                                     <td className="py-3 px-6">
                                         {user.role === 'admin' ? (
-                                            <span className="bg-indigo-500 text-white py-1 px-2 rounded-full">
-                                                Admin
-                                            </span>
+                                            <span
+                                            onClick={() => handleMakeAdmin(user)} 
+                                            className="bg-indigo-500 cursor-pointer text-white py-1 px-2 rounded-full">Admin</span>
                                         ) : (
                                             <button
                                                 onClick={() => handleMakeAdmin(user)}
                                                 className="bg-indigo-500 text-white py-1 px-2 rounded-full"
+                                                disabled={isUpdating} // Disable button while updating
                                             >
                                                 <FaUsers />
                                             </button>

@@ -103,13 +103,10 @@ export const getAllUsers = async (req, res) => {
 // Update user details
 export const updateUserDetails = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { name, email, role } = req.body;
-
-        console.log(req.headers.authorization)
-
-        // Get the token from the request headers
+        const { id } = req.params; // Get the user ID from request params
+        const { name, email, role } = req.body; // Get data from the request body
         const token = req.headers.authorization?.split(' ')[1];
+
         if (!token) {
             return res.status(401).json({ message: 'Authentication token required' });
         }
@@ -117,7 +114,11 @@ export const updateUserDetails = async (req, res) => {
         // Verify the token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const loggedInUserId = decoded.id;
-        const loggedInUserRole = decoded.role;
+
+        const loggedInUser = await User.findOne({_id:loggedInUserId});
+        const loggedInUserRole = loggedInUser.role
+
+        console.log(loggedInUser)
 
         // Fetch the user to be updated
         const userToUpdate = await User.findById(id);
@@ -125,30 +126,21 @@ export const updateUserDetails = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // If the logged-in user is an admin, they can update any user's role
+        // If the logged-in user is an admin, they can update any user's details
         if (loggedInUserRole === 'admin') {
-            if (role) {
-                userToUpdate.role = role;
-            }
-            if (name) {
-                userToUpdate.name = name;
-            }
-            if (email) {
-                userToUpdate.email = email;
-            }
+            // Update name, email, and role if provided
+            if (name) userToUpdate.name = name;
+            if (email) userToUpdate.email = email;
+            if (role) userToUpdate.role = role; // Admin can change roles
         } else {
-            // If the logged-in user is not an admin, they can only update their own details
-            if (userToUpdate._id.toString() !== loggedInUserId) {
+            // If the logged-in user is not an admin
+            if (loggedInUserId !== userToUpdate._id.toString()) {
+                // If the user is trying to update someone else's details
                 return res.status(403).json({ message: 'Permission denied' });
             }
-
-            // Update only name and email
-            if (name) {
-                userToUpdate.name = name;
-            }
-            if (email) {
-                userToUpdate.email = email;
-            }
+            // Update only name and profile image for non-admin users
+            if (name) userToUpdate.name = name;
+            // Do not update email or role
             if (role) {
                 return res.status(403).json({ message: 'You are not allowed to update the role' });
             }
@@ -180,4 +172,5 @@ export const updateUserDetails = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
 

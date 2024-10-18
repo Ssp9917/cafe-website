@@ -11,19 +11,19 @@ const instance = axios.create({
 });
 
 // Interceptor to attach token from localStorage to headers
-instance.interceptors.request.use(
-  (config) => {
-    // Retrieve the token from localStorage
-    const token = localStorage.getItem('token');
-    if (token) {
-      // Set the Authorization header with the token if it exists
-      config.headers['Authorization'] = `Bearer ${JSON.parse(token)}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// instance.interceptors.request.use(
+//   (config) => {
+//     // Retrieve the token from localStorage
+//     const token = localStorage.getItem('token');
+//     if (token) {
+//       // Set the Authorization header with the token if it exists
+//       config.headers['Authorization'] = `Bearer ${JSON.parse(token)}`;
+//     }
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
 
 export default instance;

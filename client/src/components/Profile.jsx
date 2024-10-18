@@ -8,6 +8,7 @@ import { IoMdLogOut } from 'react-icons/io';
 import { FaUserCircle } from 'react-icons/fa';
 import { AuthContext } from "../context/AuthProvider";
 import Swal from "sweetalert2";
+import useAdmin from "../hooks/useAdmin";
 // import useAdmin from "../hooks/useAdmin";
 
 
@@ -16,7 +17,9 @@ const Profile = ({ user }) => {
 
     const { logout } = useContext(AuthContext);
     const navigate = useNavigate()
-    const [isAdmin, isAdminLoading] = useState(true);
+    const [isAdmin] = useAdmin();
+
+    console.log(isAdmin)
 
 
     // Logout function

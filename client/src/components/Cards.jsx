@@ -1,10 +1,16 @@
 import React from "react";
+import { useDispatch } from 'react-redux';
+import { addItemToCart } from "../features/cart/cartSlice";
 
-const Cards = ({item}) => {
+const Cards = ({ item }) => {
 
-  console.log(item)
+  const dispatch = useDispatch();
 
-    const { recipeName, image, price, recipeDetails, _id } = item;
+  const handleAddToCart = (item) => {
+    dispatch(addItemToCart(item));
+  };
+
+  const { recipeName, image, price, recipeDetails, _id } = item;
 
   return (
     <div className="bg-cardYellow rounded-lg shadow-2xl hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out">

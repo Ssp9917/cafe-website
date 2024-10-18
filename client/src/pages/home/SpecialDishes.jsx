@@ -86,6 +86,7 @@ const SpecialDishes = () => {
       price: 9.99,
     },
   ]);
+  
   const slider = React.useRef(null);
 
   // useEffect(() => {

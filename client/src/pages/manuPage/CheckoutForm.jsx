@@ -51,7 +51,7 @@ const CheckoutForm = ({ price, cart }) => {
             console.log(paymentMethod);
 
             // Simulating successful payment
-            const paymentIntent = { status: 'succeeded', id: 'dummy_payment_intent_id4' };
+            const paymentIntent = { status: 'succeeded', id: 'dummy_payment_intent_id5' };
 
             if (paymentIntent.status === 'succeeded') {
                

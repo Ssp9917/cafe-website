@@ -12,6 +12,7 @@ const SpecialDishes = () => {
   // Fetch menu items from the API
   const { data: menuItems, isLoading, error } = useGetMenuItemsQuery();
 
+  
   // Filter the menu items to only include those with specialDishes set to true
   const specialDishes = menuItems?.filter((item) => item.specialDishes === true) || [];
 

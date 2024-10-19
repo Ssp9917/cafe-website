@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { FaTrashAlt, FaUsers } from 'react-icons/fa';
-import { useGetAllUsersQuery, useUpdateUserProfileMutation } from '../../../api/userApiSlice';
+import { useDeleteUserMutation, useGetAllUsersQuery, useUpdateUserProfileMutation } from '../../../api/userApiSlice';
 import Swal from 'sweetalert2';
+import { AuthContext } from '../../../context/AuthProvider';
 
 const Users = () => {
     // Fetching users from the API
     const { data: usersData, isLoading, isError, error, refetch } = useGetAllUsersQuery();
     const [users, setUsers] = useState([]);
     const [updateUserProfile, { isLoading: isUpdating, isError: isUpdatingError }] = useUpdateUserProfileMutation();
-
+    const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
+    const {user:currentUser} = useContext(AuthContext)
     // Update the local state when the API data changes
     useEffect(() => {
         if (usersData) {
@@ -16,33 +18,75 @@ const Users = () => {
         }
     }, [usersData]);
 
-const handleMakeAdmin = async (user) => {
-    console.log(user);
+    const handleMakeAdmin = async (user) => {
+        console.log(user);
 
-    // Determine the new role
-    const newRole = user.role === 'admin' ? 'user' : 'admin';
+        // Determine the new role
+        const newRole = user.role === 'admin' ? 'user' : 'admin';
 
-    try {
-        await updateUserProfile({ id: user._id, role: newRole }).unwrap();
-        refetch();  
+        try {
+            await updateUserProfile({ id: user._id, role: newRole }).unwrap();
+            refetch();
 
-        // Show a success message with SweetAlert2
-        Swal.fire({
-            title: 'Success!',
-            text: `User role updated to ${newRole}.`,
-            icon: 'success',
-            confirmButtonText: 'OK',
-        });
-    } catch (error) {
-        console.error('Failed to update role:', error);
-    }
-};
-
+            // Show a success message with SweetAlert2
+            Swal.fire({
+                title: 'Success!',
+                text: `User role updated to ${newRole}.`,
+                icon: 'success',
+                confirmButtonText: 'OK',
+            });
+        } catch (error) {
+            console.error('Failed to update role:', error);
+        }
+    };
+    console.log(currentUser)
 
     // Handle deleting a user
-    const handleDeleteUser = (user) => {
-        const filteredUsers = users.filter((u) => u._id !== user._id);
-        setUsers(filteredUsers);
+    const handleDeleteUser = async (user) => {
+        // Check if the current user is an admin
+        console.log(currentUser)
+        if (currentUser.role !== 'admin') {
+            Swal.fire({
+                title: 'Error!',
+                text: 'You do not have permission to delete users.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+            });
+            return;
+        }
+
+        // Confirm deletion with SweetAlert2
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you want to delete this user?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await deleteUser(user._id).unwrap();
+                refetch();
+
+                // Show a success message
+                Swal.fire({
+                    title: 'Deleted!',
+                    text: 'User deleted successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                });
+            } catch (error) {
+                console.error('Failed to delete user:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to delete the user.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
+            }
+        }
     };
 
     // Display loading state
@@ -75,6 +119,7 @@ const handleMakeAdmin = async (user) => {
 
                 {/* Updating Loading State for Role Update */}
                 {isUpdating && <p className="text-yellow-500">Updating user role...</p>}
+                {isDeleting && <p className="text-yellow-500">Deleting user...</p>}
                 {isUpdatingError && (
                     <p className="text-red-500">Error updating role: {isUpdatingError?.message || 'An error occurred'}</p>
                 )}
@@ -99,8 +144,8 @@ const handleMakeAdmin = async (user) => {
                                     <td className="py-3 px-6">
                                         {user.role === 'admin' ? (
                                             <span
-                                            onClick={() => handleMakeAdmin(user)} 
-                                            className="bg-indigo-500 cursor-pointer text-white py-1 px-2 rounded-full">Admin</span>
+                                                onClick={() => handleMakeAdmin(user)}
+                                                className="bg-indigo-500 cursor-pointer text-white py-1 px-2 rounded-full">Admin</span>
                                         ) : (
                                             <button
                                                 onClick={() => handleMakeAdmin(user)}

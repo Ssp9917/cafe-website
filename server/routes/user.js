@@ -11,6 +11,7 @@ import {
     login,
     getAllUsers,
     updateUserDetails,
+    deleteUser,
 } from '../controllers/user.js';
 
 const authRouter = express.Router();
@@ -42,5 +43,8 @@ authRouter.get('/getAllUser',getAllUsers);
 
 // updateUserDetails
 authRouter.put('/users/:id?', upload.single('profileImage'), updateUserDetails);
+
+// deleteUserRoute
+authRouter.delete('/deleteUsers/:id',deleteUser)
 
 export default authRouter;

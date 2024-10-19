@@ -82,7 +82,7 @@ const AddMenu = () => {
                                 <option value="noodles">Noodles</option>
                                 <option value="dessert">Dessert</option>
                                 <option value="drinks">Drinks</option>
-                                <option value="popular">Popular</option>
+                                {/* <option value="popular">Popular</option> */}
                             </select>
                         </div>
 

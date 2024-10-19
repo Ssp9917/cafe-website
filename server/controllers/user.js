@@ -99,7 +99,6 @@ export const getAllUsers = async (req, res) => {
 }
 
 
-
 // Update user details
 export const updateUserDetails = async (req, res) => {
     try {
@@ -172,5 +171,39 @@ export const updateUserDetails = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+
+// Delete user
+export const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params; // Get the user ID from request params
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (!token) {
+            return res.status(401).json({ message: 'Authentication token required' });
+        }
+
+        // Verify the token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const loggedInUserId = decoded.id;
+
+        const loggedInUser = await User.findOne({ _id: loggedInUserId });
+        const loggedInUserRole = loggedInUser.role;
+
+        // Check if the logged-in user is an admin
+        if (loggedInUserRole !== 'admin') {
+            return res.status(403).json({ message: 'You do not have permission to delete users' });
+        }
+
+        // Proceed to delete the user
+        await User.findByIdAndDelete(id);
+
+        res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 
 

@@ -17,8 +17,6 @@ const app = express();
 // MongoDB connect
 connectDB();
 
-// CORS configuration
-const cors = require('cors');
 
 app.use(cors({
   origin: '*', // Allow requests from any origin

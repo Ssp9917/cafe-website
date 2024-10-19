@@ -46,6 +46,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
+// Basic response for the root route
+app.get('/', (req, res) => {
+  res.send('API is running');
+});
 app.use('/api/auth', authRouter);
 app.use('/api/menuItem', menuItemRoutes); // Use menu routes
 

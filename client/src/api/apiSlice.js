@@ -7,7 +7,7 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BackendLiveUrl}/api/`,
     prepareHeaders: (headers, { getState }) => {
-      console.log('prepareHeaders is called');
+      console.log('prepareHeaders is called')
       const token = getState().auth.token; // Fetch the token from state
       console.log(getState())
       if (token) {

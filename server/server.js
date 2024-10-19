@@ -18,11 +18,14 @@ const app = express();
 connectDB();
 
 // CORS configuration
+const cors = require('cors');
+
 app.use(cors({
-  origin: 'http://localhost:5173', // Replace with the correct client URL
+  origin: '*', // Allow requests from any origin
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'], // Ensure 'Authorization' is allowed
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
 
 
 // Middleware to parse JSON requests

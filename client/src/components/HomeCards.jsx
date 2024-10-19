@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addItemToCart } from "../features/cart/cartSlice";
 
 const HomeCards = ({ item }) => {
   const { recipeName, image, price, recipeDetails, _id } = item;
@@ -10,12 +12,14 @@ const HomeCards = ({ item }) => {
     setIsHeartFilled(!isHeartFilled);
   };
 
-  const handleAddToCart = () => {
-    console.log("Item added to cart!");
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (item) => {
+    dispatch(addItemToCart(item));
   };
 
   return (
-    <div className="bg-cardYellow rounded-lg overflow-hidden shadow-2xl max-w-xs mx-auto mb-6 mt-4">
+    <div className="bg-cardYellow  rounded-lg overflow-hidden shadow-2xl max-w-xs mx-auto mb-6 mt-4">
       <div className="relative">
         <img
           src={BackendUrl + image}
@@ -33,9 +37,9 @@ const HomeCards = ({ item }) => {
         <h2 className="text-lg text-slate-700 font-semibold mb-2">{recipeName}</h2>
         <p className="text-gray-600 mb-4">{recipeDetails}</p>
         <div className="flex items-center justify-between">
-          <span className="text-base font-bold text-orange-800">${price}</span>
+          <span className="text-base font-bold text-orange-800">₹ {price}</span>
           <button
-            onClick={handleAddToCart}
+            onClick={() => handleAddToCart(item)}
             className="bg-yellow-300 hover:bg-mYyellow text-black font-bold py-1 px-3 rounded-full"
           >
             Add to Cart

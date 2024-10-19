@@ -135,11 +135,12 @@ const Menu = () => {
           </div>
 
           {/* Product Cards */}
-          <div className="grid ml-8 md:grid-cols-4 md:ml-12 sm:grid-cols-2 grid-cols-1 gap-12 place-items-center">
+          <div className="grid ml-8 md:grid-cols-3 md:ml-12 sm:grid-cols-2 grid-cols-1 gap-12 place-items-center w-full justify-items-center">
             {currentItems.map((item) => (
               <Cards key={item._id} item={item} />
             ))}
           </div>
+
         </div>
       </div>
 

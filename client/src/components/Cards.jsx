@@ -13,12 +13,12 @@ const Cards = ({ item }) => {
   const { recipeName, image, price, recipeDetails, _id } = item;
 
   return (
-    <div className="bg-cardYellow rounded-lg shadow-2xl hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out">
-      <div className="flex justify-center items-center">
+    <div className="bg-cardYellow max-w-[350px] rounded-lg shadow-2xl hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out">
+      <div className="flex justify-center items-center ">
         <img
           src={`http://localhost:5001/${image}`}
           alt={name}
-          className="w-[300px] mt-3 h-48 rounded-t-lg"
+          className="w-full mt-3 h-48 rounded-t-lg"
         />
       </div>
       <div className="p-3">

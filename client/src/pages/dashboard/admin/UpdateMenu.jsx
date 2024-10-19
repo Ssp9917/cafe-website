@@ -42,7 +42,7 @@ const UpdateMenu = () => {
       }
 
       // Making the API request to update the menu item
-      await updateMenuItems({ id: item._id, formData });
+      await updateMenuItems({ id: item._id, updatedMenuItem:formData });
 
       // Reset form after successful update
       reset();

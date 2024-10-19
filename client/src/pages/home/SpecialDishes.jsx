@@ -12,17 +12,19 @@ const SpecialDishes = () => {
   // Fetch menu items from the API
   const { data: menuItems, isLoading, error } = useGetMenuItemsQuery();
 
-  
+
   // Filter the menu items to only include those with specialDishes set to true
   const specialDishes = menuItems?.filter((item) => item.specialDishes === true) || [];
 
   const settings = {
     dots: true,
-    infinite: false,
+    infinite: true,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 3,
     initialSlide: 0,
+    autoplay: true, // Enable auto-scrolling
+    autoplaySpeed: 3000,
     responsive: [
       {
         breakpoint: 1024,
@@ -30,6 +32,8 @@ const SpecialDishes = () => {
           slidesToShow: 3,
           slidesToScroll: 3,
           infinite: true,
+          autoplay: true, // Enable auto-scrolling
+          autoplaySpeed: 3000,
           dots: true,
         },
       },
@@ -39,6 +43,8 @@ const SpecialDishes = () => {
           slidesToShow: 2,
           slidesToScroll: 2,
           initialSlide: 2,
+          autoplay: true, // Enable auto-scrolling
+          autoplaySpeed: 3000,
         },
       },
       {
@@ -46,6 +52,8 @@ const SpecialDishes = () => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+          autoplay: true, // Enable auto-scrolling
+          autoplaySpeed: 3000,
         },
       },
     ],

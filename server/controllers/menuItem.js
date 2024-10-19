@@ -56,6 +56,8 @@ export const updateMenuItem = async (req, res) => {
       updatedData.image = req.file.path; // Update image if a new one is uploaded
     }
 
+    console.log(updatedData)
+    
     const updatedMenuItem = await MenuItem.findByIdAndUpdate(id, updatedData, { new: true });
     if (!updatedMenuItem) {
       return res.status(404).json({ message: 'Menu item not found' });

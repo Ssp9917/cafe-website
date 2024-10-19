@@ -29,3 +29,11 @@
         line-height: 1.375
     }
 }
+
+.dropdown-content{
+    background-color: #000;
+    top: 38px;
+    left: -10px;
+    border-radius: 0px;
+    height: 100vh;
+}

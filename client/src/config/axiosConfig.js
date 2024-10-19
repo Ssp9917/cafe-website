@@ -1,9 +1,12 @@
 import axios from 'axios';
 
+const BackendLiveUrl = import.meta.env.VITE_BACKEND_BASE_URL
+
+
+
 // Create an Axios instance with default configurations
 const instance = axios.create({
-  baseURL: 'http://localhost:5001/api',
-  // baseURL:'http://0.0.0.0:8000/api',
+  baseURL: `${BackendLiveUrl}/api`,
   headers: {
     'Accept': 'application/json',
   },

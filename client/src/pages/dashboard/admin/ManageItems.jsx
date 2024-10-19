@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useGetMenuItemsQuery, useDeleteMenuItemsMutation } from "../../../api/menuItemApiSlice";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const ManageItems = () => {
   const [menu, setMenu] = useState([]);
@@ -60,7 +61,7 @@ const ManageItems = () => {
 
   // Loading state
   if (isLoading) {
-    return <div className="text-center text-white">Loading menu items...</div>;
+    return <div className="text-center text-white"><LoadingSpinner/></div>;
   }
 
   // Error state

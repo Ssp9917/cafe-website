@@ -3,6 +3,7 @@ import { FaTrashAlt, FaUsers } from 'react-icons/fa';
 import { useDeleteUserMutation, useGetAllUsersQuery, useUpdateUserProfileMutation } from '../../../api/userApiSlice';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../../../context/AuthProvider';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 const Users = () => {
     // Fetching users from the API
@@ -92,9 +93,7 @@ const Users = () => {
     // Display loading state
     if (isLoading) {
         return (
-            <div className="text-center text-white">
-                <p>Loading users...</p>
-            </div>
+           <LoadingSpinner/>
         );
     }
 

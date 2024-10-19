@@ -6,7 +6,7 @@ import { GiTakeMyMoney } from "react-icons/gi";
 
 const Dashboard = () => {
     return (
-        <div className="w-full h-screen  mt-4 px-4 mx-auto">
+        <div className="w-full md:h-screen  h-full mt-4 px-4 mx-auto">
             <div className="dashboard-container rounded-2xl  max-w-screen-lg mx-auto">
                 <h2 className="text-3xl text-white text-center  font-semibold mt-4 ">
                  Admin <span className='text-yellow-600'>Dashboard</span> 

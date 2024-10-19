@@ -74,17 +74,21 @@ const DashboardLayout = () => {
                 <input id="my-drawer-2" type="checkbox" className="drawer-toggle outlet-background " />
                 <div className="drawer-content h-screen  outlet-background flex flex-col">
                     {/* Page content here */}
-                    <div className='flex items-center  justify-between mx-4 outlet-background '>
-                        <label htmlFor="my-drawer-2" className="btn drawer-button border-none text-2xl bg-slate-300 text-yellow-200 lg:hidden">
-                            <MdDashboard />
+                    <div className='flex items-center  justify-between px-4 outlet-background bg-black '>
+                        <label htmlFor="my-drawer-2" className="btn drawer-button border-none text-2xl bg-black text-yellow-200 lg:hidden">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
+                            </svg>
+
                         </label>
                     </div>
 
-                    <div className='bg-black mt-0 h-screen outlet-background '>
+                    <div className='bg-black mt-0 md:h-screen  outlet-background '>
                         <Outlet />
                     </div>
                 </div>
-                <div className="drawer-side ">
+                <div className="drawer-side leftside">
                     <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay "></label>
                     <ul className="menu p-4 w-80 min-h-full text-base-content text-slate-400 bg-stone-950 ">
                         {/* Sidebar content here */}

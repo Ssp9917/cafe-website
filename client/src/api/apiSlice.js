@@ -1,9 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+const BackendLiveUrl = import.meta.env.VITE_BACKEND_BASE_URL
+
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:5001/api/',
+    baseUrl: `${BackendLiveUrl}/api/`,
     prepareHeaders: (headers, { getState }) => {
       console.log('prepareHeaders is called');
       const token = getState().auth.token; // Fetch the token from state

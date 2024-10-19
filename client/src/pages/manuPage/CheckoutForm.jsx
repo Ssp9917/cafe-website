@@ -1,7 +1,8 @@
-// CheckoutForm.js
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAddOrderMutation } from '../../api/orderSlice';
+import Swal from 'sweetalert2';
 
 const CheckoutForm = ({ price, cart }) => {
     const stripe = useStripe();
@@ -10,6 +11,9 @@ const CheckoutForm = ({ price, cart }) => {
 
     const [cardError, setCardError] = useState('');
     const [clientSecret, setClientSecret] = useState('');
+
+    // Using the mutation hook for adding an order
+    const [addOrder, { isLoading, error }] = useAddOrderMutation();
 
     useEffect(() => {
         if (typeof price !== 'number' || price < 1) {
@@ -34,36 +38,49 @@ const CheckoutForm = ({ price, cart }) => {
             return;
         }
 
-        const { error, paymentMethod } = await stripe.createPaymentMethod({
+        const { error: paymentError, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card,
         });
 
-        if (error) {
-            console.log('[error]', error);
-            setCardError(error.message);
+        if (paymentError) {
+            console.log('[error]', paymentError);
+            setCardError(paymentError.message);
         } else {
             setCardError('Success! Payment method created: ' + paymentMethod.id);
             console.log(paymentMethod);
 
             // Simulating successful payment
-            const paymentIntent = { status: 'succeeded', id: 'dummy_payment_intent_id' };
+            const paymentIntent = { status: 'succeeded', id: 'dummy_payment_intent_id4' };
 
             if (paymentIntent.status === 'succeeded') {
-                alert('Payment successful');
-                navigate('/order');
+               
 
-                // Simulate sending payment info to your backend
+                // Create payment info object
                 const paymentInfo = {
                     transactionId: paymentIntent.id,
                     price,
                     quantity: cart.length,
                     status: 'Order pending',
-                    itemName: cart.map((item) => item.name),
+                    itemName: cart.map((item) => item.recipeName),
                     cartItems: cart.map((item) => item._id),
                 };
-                console.log(paymentInfo);
-                // Replace with your API call to send payment info
+
+                // Send payment info to your backend
+                try {
+                    await addOrder(paymentInfo).unwrap();
+                    // Show a success message with SweetAlert2
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Order created successfully.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                    });
+
+                    navigate('/order');
+                } catch (err) {
+                    console.error('Error saving order:', err);
+                }
             }
         }
     };
@@ -80,7 +97,7 @@ const CheckoutForm = ({ price, cart }) => {
                     <div className='bg-white shadow-lg rounded-lg p-6'>
                         <h4 className='text-xl text-gray-800 font-semibold'>Order Summary</h4>
                         <p className='mt-4 text-gray-600'>
-                            Total Price: <span className='font-semibold'>${price}</span>
+                            Total Price: <span className='font-semibold'>₹{price}</span>
                         </p>
                         <p className='text-gray-600'>
                             Items: <span className='font-semibold'>{Array.isArray(cart) ? cart.length : 0}</span>
@@ -104,12 +121,13 @@ const CheckoutForm = ({ price, cart }) => {
                         />
                         <button
                             type="submit"
-                            disabled={!stripe}
+                            disabled={!stripe || isLoading}
                             className='mt-6 w-full bg-yellow-300 hover:bg-yellow-400 text-slate-700 font-medium py-2 rounded shadow'
                         >
-                            Pay
+                            {isLoading ? 'Processing...' : 'Pay'}
                         </button>
                         {cardError && <p className="text-red-600 mt-2">{cardError}</p>}
+                        {error && <p className="text-red-600 mt-2">Error: {error.data?.message || 'Failed to create order'}</p>}
                     </form>
                 </div>
             </div>

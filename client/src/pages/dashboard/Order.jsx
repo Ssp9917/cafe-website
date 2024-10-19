@@ -1,39 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useGetAllOrdersQuery } from '../../api/orderSlice';
 
 const Order = () => {
-  const [orders, setOrders] = useState([
-    {
-      transactionId: 'TXN123456',
-      createdAt: '2024-10-15T14:32:00Z',
-      price: 2500,
-      status: 'completed',
-    },
-    {
-      transactionId: 'TXN789012',
-      createdAt: '2024-09-20T10:45:00Z',
-      price: 1500,
-      status: 'pending',
-    },
-    {
-      transactionId: 'TXN345678',
-      createdAt: '2024-08-05T18:25:00Z',
-      price: 3200,
-      status: 'completed',
-    },
-    {
-      transactionId: 'TXN901234',
-      createdAt: '2024-07-14T09:15:00Z',
-      price: 1800,
-      status: 'failed',
-    },
-    {
-      transactionId: 'TXN567890',
-      createdAt: '2024-06-30T16:50:00Z',
-      price: 2200,
-      status: 'completed',
-    },
-  ]);
+  // Fetching orders using the query hook
+  const { data: orders = [], isLoading, error } = useGetAllOrdersQuery();
 
   const formatDateTime = (dateTimeString) => {
     const options = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
@@ -62,7 +33,15 @@ const Order = () => {
                   <td className="border-b p-2">{formatDateTime(item.createdAt)}</td>
                   <td className="border-b p-2">{item.transactionId}</td>
                   <td className="border-b p-2">Rs .{item.price}</td>
-                  <td className={`border-b p-2 ${item.status === 'completed' ? 'text-green-500' : item.status === 'pending' ? 'text-orange-500' : 'text-red-500'}`}>
+                  <td
+                    className={`border-b p-2 ${
+                      item.status === 'completed'
+                        ? 'text-green-500'
+                        : item.status === 'pending'
+                        ? 'text-orange-500'
+                        : 'text-red-500'
+                    }`}
+                  >
                     {item.status}
                   </td>
                 </tr>
@@ -71,7 +50,9 @@ const Order = () => {
           </table>
           <div className="mt-4">
             <Link to="/contact-us">
-              <button className="bg-yellow-300 text-slate-700 text-base py-2 px-4 rounded">Contact Us</button>
+              <button className="bg-yellow-300 text-slate-700 text-base py-2 px-4 rounded">
+                Contact Us
+              </button>
             </Link>
           </div>
         </div>
@@ -81,7 +62,15 @@ const Order = () => {
 
   return (
     <div className="container mx-auto mt-8">
-      {orders.length > 0 ? renderTable() : <p>No orders found.</p>}
+      {isLoading ? (
+        <p>Loading orders...</p>
+      ) : error ? (
+        <p className="text-red-600">Failed to load orders. Please try again later.</p>
+      ) : orders.length > 0 ? (
+        renderTable()
+      ) : (
+        <p>No orders found.</p>
+      )}
     </div>
   );
 };

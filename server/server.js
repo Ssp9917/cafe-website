@@ -7,6 +7,8 @@ import cors from 'cors';
 import './config/passport.js'; // Passport configuration import
 import authRouter from './routes/user.js';
 import menuItemRoutes from './routes/menuItem.js';
+import paymentRoutes from './routes/paymentRoutes.js';
+import orderRouter from './routes/orderRoutes.js';
 
 dotenv.config();
 
@@ -51,7 +53,9 @@ app.get('/', (req, res) => {
   res.send('API is running');
 });
 app.use('/api/auth', authRouter);
-app.use('/api/menuItem', menuItemRoutes); // Use menu routes
+app.use('/api/menuItem', menuItemRoutes);
+app.use('/api/payment',paymentRoutes);
+app.use('/api/order',orderRouter)
 
 // Port
 const PORT = process.env.PORT || 5001;

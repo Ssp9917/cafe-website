@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Cards from '../../components/Cards';
 import { useGetMenuItemsQuery } from '../../api/menuItemApiSlice';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const Menu = () => {
   const [menu, setMenu] = useState([]);
@@ -20,8 +21,6 @@ const Menu = () => {
       setFilteredItems(menuData);
     }
   }, [menuData]);
-
-  console.log(menu)
 
   // Handle data filtering by category
   const filterItems = (category) => {
@@ -72,7 +71,7 @@ const Menu = () => {
 
   // Render loading, error, or content
   if (isLoading) {
-    return <div className="text-center mt-20">Loading...</div>;
+    return <LoadingSpinner/>
   }
 
   if (isError) {
@@ -83,12 +82,12 @@ const Menu = () => {
     <div>
       {/* Menu banner */}
       <div className="section-container mt-20 bg-gradient-to-r menu-background bg-white">
-        <div className="py-30 flex flex-col md:flex-row-reverse justify-between items-center gap-6">
-          <div className="md:w-1/2">
-            <img src="/menuChef3.png" alt="banner" className="w-full h-[500px] mb-6" />
+        <div className="py-12 flex flex-col-reverse md:flex-row-reverse justify-between items-center gap-6">
+          <div className="w-full md:w-1/2">
+            <img src="/menuChef3.png" alt="banner" className="w-full h-auto md:h-[500px] mb-6" />
           </div>
-          <div className="md:w-1/2 space-y-7 px-4">
-            <div className="rounded-3xl shadow-xl p-8 px-10 bg-simpleLightYellow">
+          <div className="w-full md:w-1/2 space-y-7 px-4">
+            <div className="rounded-3xl shadow-xl p-6 md:p-8 bg-simpleLightYellow">
               <p className="text-gray-600 mt-4">
                 <span className="text-2xl">"</span>
                 <span className="text-lg">
@@ -103,10 +102,10 @@ const Menu = () => {
 
       {/* Menu Shop Section */}
       <div className="section-container">
-        <div className="flex flex-row justify-between items-center md:items-start gap-8 mt-6 flex-wrap">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-8 mt-6 flex-wrap">
           {/* Filtering Buttons */}
-          <div>
-            <button onClick={showAll} className={`w-24 mr-2 px-4 bg-yellow-200 text-slate-700 py-2 rounded-full shadow-2xl hover:shadow-none hover:bg-green-600 transition-all duration-300 ${selectedCategory === 'all' ? 'bg-yellow-300 text-black' : ''}`}>
+          <div className="flex flex-wrap gap-2 justify-center">
+            <button onClick={showAll} className={`w-24 mr-2 px-4 bg-yellow-200 text-slate-700 py-2 rounded-full shadow-xl hover:shadow-none hover:bg-green-600 transition-all duration-300 ${selectedCategory === 'all' ? 'bg-yellow-300 text-black' : ''}`}>
               All
             </button>
             {['rice', 'kottu', 'burger', 'noodles', 'dessert', 'drinks'].map((category) => (
@@ -117,8 +116,8 @@ const Menu = () => {
           </div>
 
           {/* Sorting Dropdown */}
-          <div className="relative">
-            <select onChange={(e) => handleSortChange(e.target.value)} className="appearance-none text-black px-7 py-2 rounded-full shadow-xl transition-all duration-300 bg-yellow-300 focus:outline-none">
+          <div className="relative w-full md:w-auto mt-4 md:mt-0">
+            <select onChange={(e) => handleSortChange(e.target.value)} className="appearance-none w-full md:w-auto text-black px-4 py-2 rounded-full shadow-xl transition-all duration-300 bg-yellow-300 focus:outline-none">
               <option value="default" disabled selected>
                 Sort by
               </option>
@@ -133,24 +132,23 @@ const Menu = () => {
               </svg>
             </div>
           </div>
-
-          {/* Product Cards */}
-          <div className="grid ml-8 md:grid-cols-3 md:ml-12 sm:grid-cols-2 grid-cols-1 gap-12 place-items-center w-full justify-items-center">
-            {currentItems.map((item) => (
-              <Cards key={item._id} item={item} />
-            ))}
-          </div>
-
         </div>
-      </div>
 
-      {/* Pagination */}
-      <div className="flex bg-white justify-center my-8">
-        {Array.from({ length: Math.ceil(filteredItems.length / itemsPerPage) }).map((_, index) => (
-          <button key={index} onClick={() => paginate(index + 1)} className={`px-4 mb-5 py-2 rounded-full shadow-xl hover:shadow-none hover:bg-yellow-400 transition-all duration-300 ${currentPage === index + 1 ? 'bg-yellow-300 text-black' : ''}`}>
-            {index + 1}
-          </button>
-        ))}
+        {/* Product Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8 place-items-center w-full">
+          {currentItems.map((item) => (
+            <Cards key={item._id} item={item} />
+          ))}
+        </div>
+
+        {/* Pagination */}
+        <div className="flex justify-center mt-8">
+          {Array.from({ length: Math.ceil(filteredItems.length / itemsPerPage) }).map((_, index) => (
+            <button key={index} onClick={() => paginate(index + 1)} className={`px-4 py-2 mb-5 rounded-full shadow-xl hover:shadow-none hover:bg-yellow-400 transition-all duration-300 ${currentPage === index + 1 ? 'bg-yellow-300 text-black' : ''}`}>
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

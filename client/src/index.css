@@ -28,6 +28,10 @@
         font-size:3rem;
         line-height: 1.375
     }
+    .drawer-side.leftside{
+        margin-top: 57px;
+        z-index: 9999;
+    }
 }
 
 .dropdown-content{
@@ -37,3 +41,8 @@
     border-radius: 0px;
     height: 100vh;
 }
+.drawer-side.leftside{
+    margin-top: 0px;
+    z-index: 9999;
+}
+

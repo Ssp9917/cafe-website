@@ -22,7 +22,7 @@ const HomeCards = ({ item }) => {
     <div className="bg-cardYellow  rounded-lg overflow-hidden shadow-2xl max-w-xs mx-auto mb-6 mt-4">
       <div className="relative">
         <img
-          src={BackendUrl + image}
+          src={BackendUrl +'/'+image}
           alt={recipeName}
           className="w-full h-40 object-cover object-center"
         />

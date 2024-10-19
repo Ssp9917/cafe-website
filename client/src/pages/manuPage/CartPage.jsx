@@ -3,18 +3,16 @@ import { FaTrash } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../../context/AuthProvider';
 import { useDispatch, useSelector } from 'react-redux';
-import { 
-  removeItemFromCart, 
-  increaseItemQuantity, 
-  decreaseItemQuantity 
+import {
+  removeItemFromCart,
+  increaseItemQuantity,
+  decreaseItemQuantity,
 } from '../../features/cart/cartSlice';
 
 const CartPage = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
   const { user } = useContext(AuthContext);
-
-  console.log(user)
 
   // Calculate price for each item
   const calculatePrice = (item) => item.price * item.quantity;
@@ -77,9 +75,9 @@ const CartPage = () => {
             <table className="w-full border-collapse border border-gray-300">
               <thead className="bg-yellow-300 text-gray-800">
                 <tr>
-                  <th className="py-2 hidden md:table-cell">Food</th>
+                  <th className="py-2 hidden sm:table-cell">Food</th>
                   <th className="py-2">Item Name</th>
-                  <th className="py-2 hidden md:table-cell">Quantity</th>
+                  <th className="py-2">Quantity</th>
                   <th className="py-2">Price</th>
                   <th className="py-2">Action</th>
                 </tr>
@@ -87,17 +85,17 @@ const CartPage = () => {
               <tbody>
                 {cartItems.map((item, index) => (
                   <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
-                    <td className="py-2 hidden md:table-cell">
+                    <td className="py-2 hidden sm:table-cell">
                       <div className="flex items-center justify-center">
                         <img
-                          src={`${import.meta.env.VITE_BACKEND_BASE_URL}${item.image}`}
+                          src={`${import.meta.env.VITE_BACKEND_BASE_URL}/${item.image}`}
                           alt="item image"
                           className="w-12 h-12 object-cover rounded-full shadow-md"
                         />
                       </div>
                     </td>
                     <td className="py-2 text-center text-slate-600">{item.recipeName}</td>
-                    <td className="py-2 hidden md:table-cell">
+                    <td className="py-2">
                       <div className="flex items-center justify-center space-x-2">
                         <button
                           className="btn btn-ghost btn-sm text-red hover:bg-red-100"
@@ -119,7 +117,9 @@ const CartPage = () => {
                         </button>
                       </div>
                     </td>
-                    <td className="py-2 text-center text-slate-600">${calculatePrice(item).toFixed(2)}</td>
+                    <td className="py-2 text-center text-slate-600">
+                    ₹{calculatePrice(item).toFixed(2)}
+                    </td>
                     <td className="py-2 text-center">
                       <button
                         className="btn btn-ghost btn-xs text-red hover:bg-red-100"

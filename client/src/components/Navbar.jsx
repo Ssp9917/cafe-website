@@ -8,8 +8,9 @@ import { useSelector } from 'react-redux';
 
 const Navbar = () => {
   const [isSticky, setSticky] = useState(false);
-  const location = useLocation(); // Get current path
-  const [activeItem, setActiveItem] = useState(location.pathname); // State to track active item
+  const [isSidebarOpen, setSidebarOpen] = useState(false); // State to manage sidebar visibility
+  const location = useLocation();
+  const [activeItem, setActiveItem] = useState(location.pathname);
 
   const cartItems = useSelector((state) => state.cart.items);
   const { user } = useContext(AuthContext);
@@ -27,9 +28,13 @@ const Navbar = () => {
     };
   }, []);
 
-  // Function to set the active item when a menu link is clicked
   const handleNavClick = (path) => {
     setActiveItem(path);
+    setSidebarOpen(false); // Close the sidebar when a menu item is clicked
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility
   };
 
   const navItems = (
@@ -54,26 +59,27 @@ const Navbar = () => {
       <div className={`navbar xl:px-24 ${isSticky ? 'shadow-md bg-stone-950 transition-all duration-300 ease-in-out' : ''}`}>
         <div className="navbar-start">
           <div className="dropdown justify-between">
-            <label tabIndex={0} className="text-slate-50 lg:hidden">
+            <label tabIndex={0} className="text-slate-50 lg:hidden" onClick={toggleSidebar}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
               </svg>
             </label>
-            <ul tabIndex={0} className="menu menu-sm  dropdown-content mt-3 z-[1] p-2 shadow rounded-box w-64 space-y-3">
-              {navItems}
-            </ul>
+            {/* Sidebar */}
+            {isSidebarOpen && (
+              <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow rounded-box w-64 space-y-3 bg-white">
+                {navItems}
+              </ul>
+            )}
           </div>
           <a href="/">
             <img src={logo} alt="" className="w-[120px]" />
           </a>
         </div>
 
-        {/* Navi items */}
         <div className="navbar-center hidden lg:flex">
           <ul className="menu text-slate-400 space-x-1 menu-horizontal px-1">{navItems}</ul>
         </div>
-        <div className="navbar-end ">
-          {/* shopping cart */}
+        <div className="navbar-end">
           {user ? (
             <Link to="/cart-page">
               <label tabIndex={0} className="btn btn-ghost border-none btn-circle lg:flex items-center justify-center mr-3">
@@ -85,15 +91,10 @@ const Navbar = () => {
                 </div>
               </label>
             </Link>
-          ) : (
-            <></>
-          )}
+          ) : null}
 
-          {/* login button */}
           {user ? (
-            <>
-              <Profile user={user} />
-            </>
+            <Profile user={user} />
           ) : (
             <Link to="/login" className="btn flex items-center gap-2 rounded-full px-6 bg-myYellowOne text-slate-600 hover:bg-mYyellow">
               <FaRegUser /> Login

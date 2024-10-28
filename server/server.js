@@ -17,12 +17,13 @@ const app = express();
 // MongoDB connect
 connectDB();
 
-// CORS configuration
+
 app.use(cors({
-  origin: 'http://localhost:5173', // Replace with the correct client URL
+  origin: '*', // Allow requests from any origin
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'], // Ensure 'Authorization' is allowed
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
 
 
 // Middleware to parse JSON requests

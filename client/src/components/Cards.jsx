@@ -5,6 +5,7 @@ import { addItemToCart } from "../features/cart/cartSlice";
 const Cards = ({ item }) => {
 
   const dispatch = useDispatch();
+  const BackendUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
   const handleAddToCart = (item) => {
     dispatch(addItemToCart(item));
@@ -16,7 +17,7 @@ const Cards = ({ item }) => {
     <div className="bg-cardYellow max-w-[350px] rounded-lg shadow-2xl hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out">
       <div className="flex justify-center items-center ">
         <img
-          src={`http://localhost:5001/${image}`}
+          src={`${BackendUrl} + '/' ${image}`}
           alt={name}
           className="w-full mt-3 h-48 rounded-t-lg"
         />

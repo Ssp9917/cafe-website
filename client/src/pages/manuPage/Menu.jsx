@@ -10,6 +10,7 @@ const Menu = () => {
   const [sortOption, setSortOption] = useState('default');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
+  
 
   // Fetch menu items using Redux Toolkit Query
   const { data: menuData, isLoading, isError, error } = useGetMenuItemsQuery();
